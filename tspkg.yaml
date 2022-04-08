@@ -1,0 +1,32 @@
+format_version: 2
+name: tlib
+version: __from_changelog__
+
+# build_deps:
+  # tentacle: any
+
+# deps:
+#   protobuf: any
+
+definitions:
+- flavor:
+    ar: x86_64-unknown-linux-gnu
+    os: ubuntu-xenial
+  extra_deps:
+    apt: zlib1g-dev build-essential autoconf libtool pkg-config cmake
+- flavor:
+    ar: x86_64-unknown-linux-gnu
+    os: ubuntu-focal
+  extra_deps:
+    apt: zlib1g-dev build-essential autoconf libtool pkg-config cmake
+- flavor: # arm
+    ar: aarch64-unknown-linux-gnu
+  extra_deps:
+    apt: zlib1g-dev build-essential autoconf libtool pkg-config cmake
+build: |
+  mkdir -p cmake/build
+  pushd cmake/build
+  cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE ../..
+  make -j`nproc`
+  make install
+  popd
